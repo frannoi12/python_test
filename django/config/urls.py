@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
-from accounts.views import google_login_callback_views, google_login_views, login_page_views
+from django.accounts.views import login_page_views
+from django.accounts.views import google_login_callback_views, google_login_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
