@@ -13,10 +13,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-load_dotenv("../.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,6 +34,11 @@ ALLOWED_HOSTS = []
 SITE_ID = 1
 
 
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'python-test-auth'
+JWT_AUTH_REFRESH_COOKIE = 'python-test-refresh-token'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,10 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     
     'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     
     'allauth',
     'allauth.account',
@@ -70,12 +78,14 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_USERNAME_REQUIRED = False
 
 
-
-GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
-GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
-GOOGLE_OAUTH_CALLBACK_URL = os.getenv("GOOGLE_OAUTH_CALLBACK_URL")
+GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID","")
+GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
+GOOGLE_OAUTH_CALLBACK_URL = os.getenv("GOOGLE_OAUTH_CALLBACK_URL", "")
 
 
 
@@ -86,11 +96,21 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
 
+
+
+
+
+
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "APP": [
+        "APPS": [
             {
                 "client_id": GOOGLE_OAUTH_CLIENT_ID,
                 "secret": GOOGLE_OAUTH_CLIENT_SECRET,
@@ -104,9 +124,18 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'python-test-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'python-test-refresh-token',
+    'JWT_AUTH_HTTPONLY': False,
+    'USER_DETAILS_SERIALIZER': 'dj_rest_auth.serializers.UserDetailsSerializer',
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
@@ -121,6 +150,7 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
