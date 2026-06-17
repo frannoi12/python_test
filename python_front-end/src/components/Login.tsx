@@ -1,11 +1,9 @@
 import React from 'react';
+import { CLIENT_ID, REDIRECT_URI, SCOPE } from '../types/google';
 
-const Login = () => {
-  const CLIENT_ID = "69563996662-c0tdajajbgg7l305vh0c0isu0l5ci8ru.apps.googleusercontent.com";
-  const REDIRECT_URI = "http://localhost:5173/google-callback"; 
-  const SCOPE = "profile email";
+const Login: React.FC = () => {
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = (): void => {
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(SCOPE)}&access_type=online`;
     window.location.href = googleAuthUrl;
   };
