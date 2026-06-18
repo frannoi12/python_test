@@ -1,16 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
-import GoogleCallback from './components/GoogleCallback';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import LoginButton from './components/GithubLogin';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/google-callback" element={<GoogleCallback />} />
+        <Route path="/login" element={<LoginButton />} />
         
         <Route 
           path="/dashboard" 

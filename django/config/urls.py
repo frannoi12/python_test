@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path, re_path
-from accounts.views import login_page_views, google_login_callback_views, google_login_views
+from accounts.views import login_page_views, google_login_callback_views, google_login_views, github_login_callback
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,7 @@ urlpatterns = [
     re_path(r"^api/v1/auth/accounts/", include("allauth.urls")),
     path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/v1/auth/google/", google_login_views.GoogleLogin.as_view(), name="google_login"),
+    path("api/v1/auth/github/", github_login_callback.GitHubLogin.as_view(), name="github_login"),
     path(
         "api/v1/auth/google/callback/",
         google_login_callback_views.GoogleLoginCallback.as_view(),

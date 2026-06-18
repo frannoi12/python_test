@@ -5,3 +5,4 @@ djangorestframework-simplejwt
 dj-rest-auth[with_social]
 python-dotenv
 django-cors-headers
+google-auth

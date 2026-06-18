@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     
     'accounts',
 ]
@@ -88,6 +89,12 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID","")
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "")
 GOOGLE_OAUTH_CALLBACK_URL = os.getenv("GOOGLE_OAUTH_CALLBACK_URL", "")
+
+
+GITHUB_OAUTH_CLIENT_ID = os.getenv("GITHUB_OAUTH_CLIENT_ID","")
+GITHUB_OAUTH_CLIENT_SECRET = os.getenv("GITHUB_OAUTH_CLIENT_SECRET", "")
+GITHUB_OAUTH_CALLBACK_URL = os.getenv("GITHUB_OAUTH_CALLBACK_URL", "")
+
 
 
 
@@ -130,6 +137,32 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {
             "access_type": "online",
         },
+    },
+    'github': {
+        'APP': {
+            'client_id': GITHUB_OAUTH_CLIENT_ID,
+            'secret': GITHUB_OAUTH_CLIENT_SECRET,
+            'key': ''
+        },
+        'SCOPE': [
+            'user',
+            'repo',
+            'read:org',
+        ],
+    },
+    "microsoft": {
+        "APPS": [
+            {
+                "client_id": "<insert-id>",
+                "secret": "<insert-secret>",
+                "settings": {
+                    "tenant": "organizations",
+                    # Optional: override URLs (use base URLs without path)
+                    "login_url": "https://login.microsoftonline.com",
+                    "graph_url": "https://graph.microsoft.com",
+                }
+            }
+        ]
     }
 }
 

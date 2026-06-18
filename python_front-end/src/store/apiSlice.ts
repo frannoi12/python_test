@@ -21,7 +21,22 @@ export const authApiSlice = createApi({
         }
       },
     }),
+    githubLogin: builder.mutation<AuthResponse, { code: string }>({
+      query: (body) => ({
+        url: '/api/v1/auth/github/',
+        method: 'POST',
+        body: body,
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(loginSuccess(data)); 
+        } catch (error) {
+          console.error("Échec de la synchronisation GitHub avec Django", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useGoogleLoginMutation } = authApiSlice;
+export const { useGoogleLoginMutation, useGithubLoginMutation } = authApiSlice;
