@@ -86,10 +86,6 @@ const Dashboard: React.FC = () => {
                   {token || "Aucun jeton trouvé dans le store"}
                 </div>
               </div>
-
-              <div className="pt-2 text-xs text-gray-400 italic">
-                💡 Le composant "ProtectedRoute" utilise cet état pour sécuriser l'accès à cette page.
-              </div>
             </div>
           </div>
         </div>

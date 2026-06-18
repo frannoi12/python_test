@@ -6,18 +6,18 @@ export const authApiSlice = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
   endpoints: (builder) => ({
-    googleLogin: builder.mutation<AuthResponse, { code: string }>({
-      query: (credentials) => ({
+    googleLogin: builder.mutation<AuthResponse, { access_token: string }>({
+      query: (body) => ({
         url: '/api/v1/auth/google/',
         method: 'POST',
-        body: credentials,
+        body: body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(loginSuccess(data));
+          dispatch(loginSuccess(data)); 
         } catch (error) {
-          console.error("Échec de la synchronisation de l'authentification", error);
+          console.error("Échec de la synchronisation avec Django", error);
         }
       },
     }),
