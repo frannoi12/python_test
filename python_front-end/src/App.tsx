@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import LoginButton from './components/GithubLogin';
+import MicrosoftLoginView from './components/MicrosoftLogin';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginButton />} />
+        <Route path="/login" element={<MicrosoftLoginView />} />
         
         <Route 
           path="/dashboard" 

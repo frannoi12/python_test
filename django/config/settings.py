@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.microsoft',
     
     'accounts',
 ]
@@ -97,6 +98,12 @@ GITHUB_OAUTH_CALLBACK_URL = os.getenv("GITHUB_OAUTH_CALLBACK_URL", "")
 
 
 
+MICROSOFT_OAUTH_CLIENT_ID = os.getenv("MICROSOFT_OAUTH_CLIENT_ID", "")
+MICROSOFT_OAUTH_CLIENT_SECRET = os.getenv("MICROSOFT_OAUTH_CLIENT_SECRET", "")
+MICROSOFT_OAUTH_CALLBACK_URL = os.getenv("MICROSOFT_OAUTH_CALLBACK_URL", "")
+
+
+
 
 LOGIN_REDIRECT_URL = '/api/v1/auth/user/'
 LOGIN_URL = '/login/'
@@ -121,7 +128,7 @@ SIMPLE_JWT = {
 
 
 
-
+SECURE_SSL_REDIRECT = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 SOCIALACCOUNT_PROVIDERS = {
@@ -151,18 +158,20 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     },
     "microsoft": {
-        "APPS": [
-            {
-                "client_id": "<insert-id>",
-                "secret": "<insert-secret>",
-                "settings": {
-                    "tenant": "organizations",
-                    # Optional: override URLs (use base URLs without path)
-                    "login_url": "https://login.microsoftonline.com",
-                    "graph_url": "https://graph.microsoft.com",
-                }
-            }
-        ]
+        'APP': {
+            'client_id': MICROSOFT_OAUTH_CLIENT_ID,
+            'secret': MICROSOFT_OAUTH_CLIENT_SECRET,
+            'key': ''
+        },
+        'SCOPE': [
+            'user.read',
+            'openid',
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'tenant': 'common',
+        }
     }
 }
 

@@ -1,3 +1,4 @@
+import { Token } from './../../../ma/node_modules/acorn/dist/acorn.d';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthResponse } from '../types/auth';
 import { loginSuccess } from './authSlice';
@@ -36,7 +37,22 @@ export const authApiSlice = createApi({
         }
       },
     }),
+    microsoftLogin: builder.mutation<AuthResponse, { access_token: Token }>({
+      query: (body) => ({
+        url: '/api/v1/auth/microsoft/',
+        method: 'POST',
+        body: body,
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(loginSuccess(data)); 
+        } catch (error) {
+          console.error("Échec de la synchronisation Microsoft avec Django", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useGoogleLoginMutation, useGithubLoginMutation } = authApiSlice;
+export const { useGoogleLoginMutation, useGithubLoginMutation, useMicrosoftLoginMutation } = authApiSlice;
